@@ -14,64 +14,30 @@ namespace FileCom
 {
     public partial class Form1 : Form
     {
-        private void LoadRootNodes()
-        {
-            // Create the root shell item.
-            ShellItem m_shDesktop = new ShellItem();
-
-            // Create the root node.
-            TreeNode tvwRoot = new TreeNode();
-            tvwRoot.Text = m_shDesktop.DisplayName;
-            tvwRoot.ImageIndex = m_shDesktop.IconIndex;
-            tvwRoot.SelectedImageIndex = m_shDesktop.IconIndex;
-            tvwRoot.Tag = m_shDesktop;
-
-            // Now we need to add any children to the root node.
-            ArrayList arrChildren = m_shDesktop.GetSubFolders();
-            foreach (ShellItem shChild in arrChildren)
-            {
-                TreeNode tvwChild = new TreeNode();
-                tvwChild.Text = shChild.DisplayName;
-                tvwChild.ImageIndex = shChild.IconIndex;
-                tvwChild.SelectedImageIndex = shChild.IconIndex;
-                tvwChild.Tag = shChild;
-
-                // If this is a folder item and has children then add a place holder node.
-                if (shChild.IsFolder && shChild.HasSubFolder)
-                    tvwChild.Nodes.Add("PH");
-                tvwRoot.Nodes.Add(tvwChild);
-            }
-
-            // Add the root node to the tree.
-            treeView1.Nodes.Clear();
-            treeView1.Nodes.Add(tvwRoot);
-            tvwRoot.Expand();
-        }
-
-        public Form1()
-        {
-            InitializeComponent();
-            светлаяToolStripMenuItem_Click(null, null);
-            SystemImageList.SetTVImageList(treeView1.Handle);
-            LoadRootNodes();
-        }
-
-        private void файлToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         public class TestColorTable : ProfessionalColorTable
         {
             public override Color MenuItemSelected
             {
-                get { return System.Drawing.Color.Blue; ; }
+                get { return System.Drawing.Color.Beige; ; }
             }
 
             public override Color MenuBorder  //added for changing the menu border
             {
                 get { return Color.White; }
             }
+        }
+
+        public Form1()
+        {
+            InitializeComponent();
+            светлаяToolStripMenuItem_Click(null, null);
+            this.webBrowser1.Url = new Uri("C:\\");
+            this.webBrowser2.Url = new Uri("C:\\");
+        }
+
+        private void файлToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void тёмнаяToolStripMenuItem_Click(object sender, EventArgs e)
@@ -81,8 +47,20 @@ namespace FileCom
             this.ForeColor = System.Drawing.Color.White;
             this.menuStrip1.BackColor = this.BackColor;
             this.menuStrip1.ForeColor = this.ForeColor;
-            this.treeView1.ForeColor = this.menuStrip1.ForeColor;
-            this.treeView1.BackColor = this.menuStrip1.BackColor;
+            this.label1.ForeColor = this.ForeColor;
+            this.label2.ForeColor = this.ForeColor;
+            this.button1.ForeColor = this.ForeColor;
+            this.button1.BackColor = this.BackColor;
+            this.button2.ForeColor = this.ForeColor;
+            this.button2.BackColor = this.BackColor;
+            this.button3.ForeColor = this.ForeColor;
+            this.button3.BackColor = this.BackColor;
+            this.button4.ForeColor = this.ForeColor;
+            this.button4.BackColor = this.BackColor;
+            this.button5.ForeColor = this.ForeColor;
+            this.button5.BackColor = this.BackColor;
+            this.button6.ForeColor = this.ForeColor;
+            this.button6.BackColor = this.BackColor;
         }
 
         private void светлаяToolStripMenuItem_Click(object sender, EventArgs e)
@@ -91,13 +69,99 @@ namespace FileCom
             this.ForeColor = System.Drawing.Color.Black;
             this.menuStrip1.BackColor = this.BackColor;
             this.menuStrip1.ForeColor = this.ForeColor;
-            this.treeView1.ForeColor = this.menuStrip1.ForeColor;
-            this.treeView1.BackColor = this.menuStrip1.BackColor;
+            this.label1.ForeColor = this.ForeColor;
+            this.label2.ForeColor = this.ForeColor;
+            this.button1.ForeColor = this.ForeColor;
+            this.button1.BackColor = this.BackColor;
+            this.button2.ForeColor = this.ForeColor;
+            this.button2.BackColor = this.BackColor;
+            this.button3.ForeColor = this.ForeColor;
+            this.button3.BackColor = this.BackColor;
+            this.button4.ForeColor = this.ForeColor;
+            this.button4.BackColor = this.BackColor;
+            this.button5.ForeColor = this.ForeColor;
+            this.button5.BackColor = this.BackColor;
+            this.button6.ForeColor = this.ForeColor;
+            this.button6.BackColor = this.BackColor;
         }
 
-        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        private void видToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            textBox1.Text = webBrowser1.Url.ToString();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (webBrowser1.CanGoBack)
+            {
+                webBrowser1.GoBack();
+                textBox1.Text = webBrowser1.Url.ToString();
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (webBrowser1.CanGoForward)
+            {
+                webBrowser1.GoForward();
+                textBox1.Text = webBrowser1.Url.ToString();
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (webBrowser2.CanGoBack)
+            {
+                webBrowser2.GoBack();
+                textBox2.Text = webBrowser2.Url.ToString();
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (webBrowser2.CanGoForward)
+            {
+                webBrowser2.GoForward();
+                textBox2.Text = webBrowser2.Url.ToString();
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            //Open browser dialog allows you to select the path
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog() { Description = "Select your path." })
+            {
+                fbd.ShowNewFolderButton = false;
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    this.webBrowser1.Url = new Uri(fbd.SelectedPath);
+                    textBox1.Text = webBrowser1.Url.ToString();
+                }
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            //Open browser dialog allows you to select the path
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog() { Description = "Select your path." })
+            {
+                fbd.ShowNewFolderButton = false;
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    this.webBrowser2.Url = new Uri(fbd.SelectedPath);
+                    textBox2.Text = webBrowser2.Url.ToString();
+                }
+            }
+        }
+
+        private void webBrowser2_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            textBox2.Text = webBrowser2.Url.ToString();
         }
     }
 }
