@@ -31,6 +31,7 @@ namespace FileCom
         {
             InitializeComponent();
             светлаяToolStripMenuItem_Click(null, null);
+            скрытьВторойЭкранToolStripMenuItem_Click(null, null);
             this.webBrowser1.Url = new Uri("C:\\");
             this.webBrowser2.Url = new Uri("C:\\");
         }
@@ -92,7 +93,10 @@ namespace FileCom
 
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            textBox1.Text = webBrowser1.Url.ToString();
+            string MyString = webBrowser1.Url.ToString();
+            char[] MyChar = {'f','i','l','e',':','/','/','/'};
+            string NewString = MyString.TrimStart(MyChar);
+            textBox1.Text = NewString;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -161,7 +165,47 @@ namespace FileCom
 
         private void webBrowser2_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            textBox2.Text = webBrowser2.Url.ToString();
+            string MyString = webBrowser2.Url.ToString();
+            char[] MyChar = { 'f', 'i', 'l', 'e', ':', '/', '/', '/' };
+            string NewString = MyString.TrimStart(MyChar);
+            textBox1.Text = NewString;
+        }
+
+        bool isHide = false;
+
+        private void скрытьВторойЭкранToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            button3.Visible = false;
+            button4.Visible = false;
+            button6.Visible = false;
+            textBox2.Visible = false;
+            label2.Visible = false;
+            webBrowser2.Visible = false;
+            if (!isHide)
+            {
+                this.Width = this.Width / 2;
+            }
+            isHide = true;
+        }
+
+        private void второйЭкранToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            button3.Visible = true;
+            button4.Visible = true;
+            button6.Visible = true;
+            textBox2.Visible = true;
+            label2.Visible = true;
+            webBrowser2.Visible = true;
+            if (isHide)
+            {
+                this.Width = this.Width * 2;
+            }
+            isHide = false;
+        }
+
+        private void создатьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
