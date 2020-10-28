@@ -33,9 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,6 +68,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -79,6 +82,51 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\35FLOPPY.ICO" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\525FLOP1.ICO" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\About.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\App.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\CDDRIVE.ICO" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Close.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\DRIVENET.ICO" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Explorer.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\File.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\FloppyDrive.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\FolderClose.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\FolderOpen.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\MyComputer.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Recycle.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Refresh.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
