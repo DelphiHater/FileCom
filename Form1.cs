@@ -165,8 +165,7 @@ namespace FileCom
 
         private void button1_Click(object sender, EventArgs e)
         {
-            TreeViewEventArgs t = new TreeViewEventArgs(lastPath);
-            tvFolders_AfterSelect(tvFolders, t);
+            tvFolders.SelectedNode = nodeCurrent.Parent;
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -205,7 +204,7 @@ namespace FileCom
         {
             try
             {
-                string name = Microsoft.VisualBasic.Interaction.InputBox("Введите название нового текстового документа", "Ввод", "Текст", 100, 100);
+                string name = Microsoft.VisualBasic.Interaction.InputBox("Введите название нового текстового документа", "Ввод", "New", 100, 100);
                 File.Create(textBox1.Text + "//" + name + ".txt");
                 TreeViewEventArgs t = new TreeViewEventArgs(nodeCurrent);
                 tvFolders_AfterSelect(tvFolders, t);
@@ -231,8 +230,8 @@ namespace FileCom
                 }
                 else
                 {
-                    Directory.Delete(textBox1.Text);
-                    TreeViewEventArgs t = new TreeViewEventArgs(nodeCurrent);
+                    Directory.Delete(textBox1.Text, true);
+                    TreeViewEventArgs t = new TreeViewEventArgs(lastPath);
                     tvFolders_AfterSelect(tvFolders, t);
                 }
             }
@@ -371,11 +370,60 @@ namespace FileCom
             return stringSplit[_maxIndex - 1];
         }
 
-        protected void PopulateFiles(TreeNode nodeCurrent, ListView lvFiles)
+
+        public void populateAll(string[] stringFiles, TreeNode nodeCurrent, ListView lvFiles)
         {
             //Populate listview with files
             string[] lvData = new string[4];
+            string stringFileName = "";
+            DateTime dtCreateDate, dtModifyDate;
+            Int64 lFileSize = 0;
 
+            //loop throught all files
+            foreach (string stringFile in stringFiles)
+            {
+                stringFileName = stringFile;
+                FileInfo objFileSize = new FileInfo(stringFileName);
+                lFileSize = objFileSize.Length;
+                dtCreateDate = objFileSize.CreationTime.AddHours(-1); //GetCreationTime(stringFileName);
+                dtModifyDate = objFileSize.LastWriteTime.AddHours(-1); //GetLastWriteTime(stringFileName);
+
+                //create listview data
+                lvData[0] = GetPathName(stringFileName);
+                lvData[1] = formatSize(lFileSize);
+
+                //check if file is in local current day light saving time
+                if (TimeZone.CurrentTimeZone.IsDaylightSavingTime(dtCreateDate) == false)
+                {
+                    //not in day light saving time adjust time
+                    lvData[2] = formatDate(dtCreateDate.AddHours(1));
+                }
+                else
+                {
+                    //is in day light saving time adjust time
+                    lvData[2] = formatDate(dtCreateDate);
+                }
+
+                //check if file is in local current day light saving time
+                if (TimeZone.CurrentTimeZone.IsDaylightSavingTime(dtModifyDate) == false)
+                {
+                    //not in day light saving time adjust time
+                    lvData[3] = formatDate(dtModifyDate.AddHours(1));
+                }
+                else
+                {
+                    //not in day light saving time adjust time
+                    lvData[3] = formatDate(dtModifyDate);
+                }
+
+
+                //Create actual list item
+                ListViewItem lvItem = new ListViewItem(lvData, 0);
+                lvFiles.Items.Add(lvItem);
+            }
+        }
+        protected void PopulateFiles(TreeNode nodeCurrent, ListView lvFiles)
+        {
             //clear list
             InitListView(lvFiles);
 
@@ -384,61 +432,14 @@ namespace FileCom
                 //check path
                 if (Directory.Exists((string)getFullPath(nodeCurrent.FullPath)) == false)
                 {
-                    MessageBox.Show("Directory or path " + nodeCurrent.ToString() + " does not exist.");
+                    MessageBox.Show("Путь " + nodeCurrent.ToString() + " не существует.");
                 }
                 else
                 {
                     try
                     {
-                        string[] stringFiles = Directory.GetFiles(getFullPath(nodeCurrent.FullPath));
-                        string stringFileName = "";
-                        DateTime dtCreateDate, dtModifyDate;
-                        Int64 lFileSize = 0;
-
-                        //loop throught all files
-                        foreach (string stringFile in stringFiles)
-                        {
-                            stringFileName = stringFile;
-                            FileInfo objFileSize = new FileInfo(stringFileName);
-                            lFileSize = objFileSize.Length;
-                            dtCreateDate = objFileSize.CreationTime; //GetCreationTime(stringFileName);
-                            dtModifyDate = objFileSize.LastWriteTime; //GetLastWriteTime(stringFileName);
-
-                            //create listview data
-                            lvData[0] = GetPathName(stringFileName);
-                            lvData[1] = formatSize(lFileSize);
-
-                            //check if file is in local current day light saving time
-                            if (TimeZone.CurrentTimeZone.IsDaylightSavingTime(dtCreateDate) == false)
-                            {
-                                //not in day light saving time adjust time
-                                lvData[2] = formatDate(dtCreateDate.AddHours(1));
-                            }
-                            else
-                            {
-                                //is in day light saving time adjust time
-                                lvData[2] = formatDate(dtCreateDate);
-                            }
-
-                            //check if file is in local current day light saving time
-                            if (TimeZone.CurrentTimeZone.IsDaylightSavingTime(dtModifyDate) == false)
-                            {
-                                //not in day light saving time adjust time
-                                lvData[3] = formatDate(dtModifyDate.AddHours(1));
-                            }
-                            else
-                            {
-                                //not in day light saving time adjust time
-                                lvData[3] = formatDate(dtModifyDate);
-                            }
-
-
-                            //Create actual list item
-                            ListViewItem lvItem = new ListViewItem(lvData, 0);
-                            lvFiles.Items.Add(lvItem);
-
-
-                        }
+                        string[]  stringFiles = Directory.GetFiles(getFullPath(nodeCurrent.FullPath));
+                        populateAll(stringFiles, nodeCurrent, lvFiles);
                     }
                     catch (IOException e)
                     {
@@ -611,7 +612,7 @@ namespace FileCom
         {
             try
             {
-                string name = Microsoft.VisualBasic.Interaction.InputBox("Введите название новой папки", "Ввод", "Текст", 100, 100);
+                string name = Microsoft.VisualBasic.Interaction.InputBox("Введите название новой папки", "Ввод", "Folder", 100, 100);
                 Directory.CreateDirectory(textBox1.Text + "\\" + name);
                 TreeViewEventArgs t = new TreeViewEventArgs(nodeCurrent);
                 tvFolders_AfterSelect(tvFolders, t);
@@ -645,6 +646,50 @@ namespace FileCom
         private void toolStripMenuItem5_Click(object sender, EventArgs e)
         {
             копироватьToolStripMenuItem_Click(null, null);
+        }
+
+        public void quickWay(string path)
+        {
+            TreeNode treeNode = tvFolders.Nodes[0].Nodes[0];
+            tvFolders.SelectedNode = treeNode;
+            tvFolders.SelectedNode.Expand();
+            foreach (TreeNode t in tvFolders.SelectedNode.Nodes)
+            {
+                if (t.Text == "Users")
+                {
+                    tvFolders.SelectedNode = t;
+                    tvFolders.SelectedNode.Expand();
+                    break;
+                }
+            }
+            foreach (TreeNode t in tvFolders.SelectedNode.Nodes)
+            {
+                if (t.Text == Environment.UserName)
+                {
+                    tvFolders.SelectedNode = t;
+                    tvFolders.SelectedNode.Expand();
+                    break;
+                }
+            }
+            foreach (TreeNode t in tvFolders.SelectedNode.Nodes)
+            {
+                if (t.Text == path)
+                {
+                    tvFolders.SelectedNode = t;
+                    tvFolders.SelectedNode.Expand();
+                    break;
+                }
+            }
+        }
+
+        private void загрузкиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            quickWay("Downloads");
+        }
+
+        private void рабочийСтолToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            quickWay("Desktop");
         }
     }
 }

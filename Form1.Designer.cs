@@ -37,6 +37,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.создатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.создатьПапкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.удалитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.переместитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.копироватьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,6 +48,7 @@
             this.темаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.тёмнаяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.светлаяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.downloadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -57,13 +59,15 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.listView1 = new System.Windows.Forms.ListView();
             this.tvFolders = new System.Windows.Forms.TreeView();
-            this.создатьПапкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.быстрыйДоступToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.загрузкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.рабочийСтолToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -76,7 +80,9 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.файлToolStripMenuItem,
             this.главнаяToolStripMenuItem,
-            this.видToolStripMenuItem});
+            this.видToolStripMenuItem,
+            this.downloadsToolStripMenuItem,
+            this.быстрыйДоступToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(928, 24);
@@ -101,6 +107,13 @@
             this.создатьToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.создатьToolStripMenuItem.Text = "Создать текстовый документ";
             this.создатьToolStripMenuItem.Click += new System.EventHandler(this.создатьToolStripMenuItem_Click);
+            // 
+            // создатьПапкуToolStripMenuItem
+            // 
+            this.создатьПапкуToolStripMenuItem.Name = "создатьПапкуToolStripMenuItem";
+            this.создатьПапкуToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.создатьПапкуToolStripMenuItem.Text = "Создать папку";
+            this.создатьПапкуToolStripMenuItem.Click += new System.EventHandler(this.создатьПапкуToolStripMenuItem_Click);
             // 
             // удалитьToolStripMenuItem
             // 
@@ -160,7 +173,7 @@
             this.тёмнаяToolStripMenuItem,
             this.светлаяToolStripMenuItem});
             this.темаToolStripMenuItem.Name = "темаToolStripMenuItem";
-            this.темаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.темаToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
             this.темаToolStripMenuItem.Text = "Тема";
             // 
             // тёмнаяToolStripMenuItem
@@ -176,6 +189,11 @@
             this.светлаяToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.светлаяToolStripMenuItem.Text = "Светлая";
             this.светлаяToolStripMenuItem.Click += new System.EventHandler(this.светлаяToolStripMenuItem_Click);
+            // 
+            // downloadsToolStripMenuItem
+            // 
+            this.downloadsToolStripMenuItem.Name = "downloadsToolStripMenuItem";
+            this.downloadsToolStripMenuItem.Size = new System.Drawing.Size(12, 20);
             // 
             // textBox1
             // 
@@ -284,13 +302,6 @@
             this.tvFolders.TabIndex = 15;
             this.tvFolders.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvFolders_AfterSelect);
             // 
-            // создатьПапкуToolStripMenuItem
-            // 
-            this.создатьПапкуToolStripMenuItem.Name = "создатьПапкуToolStripMenuItem";
-            this.создатьПапкуToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
-            this.создатьПапкуToolStripMenuItem.Text = "Создать папку";
-            this.создатьПапкуToolStripMenuItem.Click += new System.EventHandler(this.создатьПапкуToolStripMenuItem_Click);
-            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -300,7 +311,7 @@
             this.toolStripMenuItem4,
             this.toolStripMenuItem5});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(210, 136);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(210, 114);
             // 
             // toolStripMenuItem1
             // 
@@ -336,6 +347,29 @@
             this.toolStripMenuItem5.Size = new System.Drawing.Size(209, 22);
             this.toolStripMenuItem5.Text = "Скопировать";
             this.toolStripMenuItem5.Click += new System.EventHandler(this.toolStripMenuItem5_Click);
+            // 
+            // быстрыйДоступToolStripMenuItem
+            // 
+            this.быстрыйДоступToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.загрузкиToolStripMenuItem,
+            this.рабочийСтолToolStripMenuItem});
+            this.быстрыйДоступToolStripMenuItem.Name = "быстрыйДоступToolStripMenuItem";
+            this.быстрыйДоступToolStripMenuItem.Size = new System.Drawing.Size(109, 20);
+            this.быстрыйДоступToolStripMenuItem.Text = "Быстрый доступ";
+            // 
+            // загрузкиToolStripMenuItem
+            // 
+            this.загрузкиToolStripMenuItem.Name = "загрузкиToolStripMenuItem";
+            this.загрузкиToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.загрузкиToolStripMenuItem.Text = "Загрузки";
+            this.загрузкиToolStripMenuItem.Click += new System.EventHandler(this.загрузкиToolStripMenuItem_Click);
+            // 
+            // рабочийСтолToolStripMenuItem
+            // 
+            this.рабочийСтолToolStripMenuItem.Name = "рабочийСтолToolStripMenuItem";
+            this.рабочийСтолToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.рабочийСтолToolStripMenuItem.Text = "Рабочий стол";
+            this.рабочийСтолToolStripMenuItem.Click += new System.EventHandler(this.рабочийСтолToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -400,6 +434,10 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
+        private System.Windows.Forms.ToolStripMenuItem downloadsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem быстрыйДоступToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem загрузкиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem рабочийСтолToolStripMenuItem;
     }
 }
 
