@@ -17,6 +17,7 @@ namespace FileCom
 {
     public partial class Form1 : Form
     {
+        ftp CurrFTP;
         public class TestColorTable : ProfessionalColorTable
         {
             public override Color MenuItemSelected
@@ -133,6 +134,8 @@ namespace FileCom
             this.button5.BackColor = this.BackColor;
             this.tvFolders.ForeColor = this.ForeColor;
             this.tvFolders.BackColor = this.BackColor;
+            this.treeView1.ForeColor = this.ForeColor;
+            this.treeView1.BackColor = this.BackColor;
             this.lvFiles.ForeColor = this.ForeColor;
             this.lvFiles.BackColor = this.BackColor;
             this.listView1.ForeColor = this.ForeColor;
@@ -153,6 +156,8 @@ namespace FileCom
             this.button5.BackColor = this.BackColor;
             this.tvFolders.ForeColor = this.ForeColor;
             this.tvFolders.BackColor = this.BackColor;
+            this.treeView1.ForeColor = this.ForeColor;
+            this.treeView1.BackColor = this.BackColor;
             this.lvFiles.ForeColor = this.ForeColor;
             this.lvFiles.BackColor = this.BackColor;
             this.listView1.ForeColor = this.ForeColor;
@@ -182,6 +187,7 @@ namespace FileCom
             {
                 this.Width = this.Width *4 / 7;
                 groupBox2.Visible = false;
+                treeView1.Visible = false;
                 isHide = true;
                 button5.Enabled = false;
             }
@@ -204,10 +210,28 @@ namespace FileCom
         {
             try
             {
-                string name = Microsoft.VisualBasic.Interaction.InputBox("Введите название нового текстового документа", "Ввод", "New", 100, 100);
-                File.Create(textBox1.Text + "//" + name + ".txt");
-                TreeViewEventArgs t = new TreeViewEventArgs(nodeCurrent);
-                tvFolders_AfterSelect(tvFolders, t);
+                int index = textBox1.Text.IndexOf(":\\");
+                if (index != -1)
+                {
+                    string name = Microsoft.VisualBasic.Interaction.InputBox
+                    ("Введите название нового текстового документа", "Ввод", "Text", this.Location.X + 100, this.Location.Y + 100);
+                    var myFile = File.Create(textBox1.Text + "//" + name + ".txt");
+                    myFile.Close();
+                    TreeViewEventArgs t = new TreeViewEventArgs(nodeCurrent);
+                    tvFolders_AfterSelect(tvFolders, t);
+                }
+                else
+                {
+                    /*if (!CurrFTP.CreateFolder("/" + textBox1.Text + "/" + name))
+                    {
+                        MessageBox.Show("Папка не создана");
+                    }
+                    else
+                    {
+                        TreeViewEventArgs t = new TreeViewEventArgs(nodeCurrent);
+                        treeView1_AfterSelect(tvFolders, t);
+                    }*/
+                }
             }
             catch
             {
@@ -219,20 +243,48 @@ namespace FileCom
         {
             try
             {
-                if (lvFiles.SelectedItems.Count != 0)
+                int index = textBox1.Text.IndexOf(":\\");
+                if (index != -1)
                 {
-                    if (textBox1.Text.Contains(lvFiles.SelectedItems[0].Text))
+                    //if on local storage
+                    if (lvFiles.SelectedItems.Count != 0)
                     {
-                        File.Delete(textBox1.Text);
-                        TreeViewEventArgs t = new TreeViewEventArgs(lastPath);
-                        tvFolders_AfterSelect(tvFolders, t);
+                        if (textBox1.Text.Contains(lvFiles.SelectedItems[0].Text))
+                        {
+                            File.Delete(textBox1.Text);
+                            TreeViewEventArgs t = new TreeViewEventArgs(nodeCurrent);
+                            tvFolders_AfterSelect(tvFolders, t);
+                        }
+                    }
+                    else if (listView1.SelectedItems.Count != 0)
+                    {
+                        if (textBox1.Text.Contains(listView1.SelectedItems[0].Text))
+                        {
+                            File.Delete(textBox1.Text);
+                            TreeViewEventArgs t = new TreeViewEventArgs(nodeCurrent);
+                            treeView1_AfterSelect(tvFolders, t);
+                        }
+                    }
+                    else
+                    {
+                        Directory.Delete(textBox1.Text, true);
+                        tvFolders.SelectedNode = nodeCurrent.Parent;
                     }
                 }
                 else
                 {
-                    Directory.Delete(textBox1.Text, true);
-                    TreeViewEventArgs t = new TreeViewEventArgs(lastPath);
-                    tvFolders_AfterSelect(tvFolders, t);
+                    //ftp
+                    CurrFTP.DeleteFTPFolder("/" + textBox1.Text);
+                    MessageBox.Show("Удаление прошло успешно!");
+                    try
+                    {
+                        TreeViewEventArgs t = new TreeViewEventArgs(nodeCurrent);
+                        treeView1_AfterSelect(tvFolders, t);
+                    }
+                    catch
+                    {
+                        treeView1.SelectedNode = nodeCurrent.Parent;
+                    }
                 }
             }
             catch
@@ -303,7 +355,7 @@ namespace FileCom
                     //check path
                     if (Directory.Exists(getFullPath(nodeCurrent.FullPath)) == false)
                     {
-                        MessageBox.Show("Directory or path " + nodeCurrent.ToString() + " does not exist.");
+                        MessageBox.Show("Папка или путь " + nodeCurrent.ToString() + " не существуют.");
                     }
                     else
                     {
@@ -504,11 +556,19 @@ namespace FileCom
 
         private void lvFiles_SelectedIndexChanged(object sender, MouseEventArgs e)
         {
+            string S3 = CurrFTP.getHost();
             string S2 = "My Computer\\";
             string S1;
             try
             {
-                S1 = nodeCurrent.FullPath;
+                if (treeView1.Visible == true)
+                {
+                    S1 = tvFolders.SelectedNode.FullPath;
+                }
+                else
+                {
+                    S1 = nodeCurrent.FullPath;
+                }
             }
             catch
             {
@@ -516,21 +576,46 @@ namespace FileCom
             }
 
             int index = S1.IndexOf(S2);
+            int index2 = S1.IndexOf(S3);
             if (index != -1)
             {
                 S1 = S1.Remove(index, S2.Length);
+                textBox1.Text = S1 + "\\" + lvFiles.SelectedItems[0].Text;
             }
-            textBox1.Text = S1 + "\\" + lvFiles.SelectedItems[0].Text;
+            else if (index2 != -1)
+            {
+                S1 = S1.Remove(index2, S3.Length);
+                for (int i = 0; i < S1.Length; i++)
+                {
+                    if (S1[i] == '\\')
+                    {
+                        S1 = S1.Remove(i, 1);
+                    }
+                }
+                textBox1.Text = S1 + lvFiles.SelectedItems[0].Text;
+            }
+            else
+            {
+                MessageBox.Show("Что ты вообще выбрал? Всё сломалось!");
+            }
+
             listView1.SelectedItems.Clear();
         }
 
         private void listView1_MouseClick(object sender, MouseEventArgs e)
         {
+            string S3 = CurrFTP.getHost();
             string S2 = "My Computer\\";
             string S1;
             try
             {
-                S1 = nodeCurrent.FullPath;
+                if (treeView1.Visible == true)
+                {
+                    S1 = treeView1.SelectedNode.FullPath;
+                } else
+                {
+                    S1 = nodeCurrent.FullPath;
+                }
             }
             catch
             {
@@ -538,17 +623,33 @@ namespace FileCom
             }
 
             int index = S1.IndexOf(S2);
+            int index2 = S1.IndexOf(S3);
             if (index != -1)
             {
                 S1 = S1.Remove(index, S2.Length);
+                textBox1.Text = S1 + "\\" + listView1.SelectedItems[0].Text;
+            } else if(index2 != -1) {
+                S1 = S1.Remove(index2, S3.Length);
+                for (int i = 0; i < S1.Length; i++)
+                {
+                    if (S1[i] == '\\')
+                    {
+                        S1 = S1.Remove(i, 1);
+                    }
+                }
+                textBox1.Text = S1 + listView1.SelectedItems[0].Text;
+            } else
+            {
+                MessageBox.Show("Что ты вообще выбрал? Всё сломалось!");
             }
-            textBox1.Text = S1 + "\\" + listView1.SelectedItems[0].Text;
+ 
+
             listView1.SelectedItems.Clear();
         }
 
         private void переместитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string s = String.Empty; ;
+            string s = String.Empty; 
             try
             {
                 //Open browser dialog allows you to select the path
@@ -556,7 +657,7 @@ namespace FileCom
                 {
                     if (fbd.ShowDialog() == DialogResult.OK)
                     {
-                        s = fbd.SelectedPath + "\\" + lvFiles.SelectedItems[0].Text; ; 
+                        s = fbd.SelectedPath + "\\" + lvFiles.SelectedItems[0].Text; 
                         File.Move(textBox1.Text, s);
                         TreeViewEventArgs t = new TreeViewEventArgs(nodeCurrent);
                         tvFolders_AfterSelect(tvFolders, t);
@@ -612,10 +713,28 @@ namespace FileCom
         {
             try
             {
-                string name = Microsoft.VisualBasic.Interaction.InputBox("Введите название новой папки", "Ввод", "Folder", 100, 100);
-                Directory.CreateDirectory(textBox1.Text + "\\" + name);
+                string name = Microsoft.VisualBasic.Interaction.InputBox
+                    ("Введите название новой папки", "Ввод", "Folder", this.Location.X + 100, this.Location.Y + 100);
+                /*Directory.CreateDirectory(textBox1.Text + "\\" + name);
                 TreeViewEventArgs t = new TreeViewEventArgs(nodeCurrent);
-                tvFolders_AfterSelect(tvFolders, t);
+                tvFolders_AfterSelect(tvFolders, t);*/
+
+                int index = textBox1.Text.IndexOf(":\\");
+                if (index != -1)
+                {
+                    Directory.CreateDirectory(textBox1.Text + "\\" + name);
+                    TreeViewEventArgs t = new TreeViewEventArgs(nodeCurrent);
+                    tvFolders_AfterSelect(tvFolders, t);
+                } else {
+                    if (!CurrFTP.CreateFolder("/" + textBox1.Text + "/" + name))
+                    {
+                        MessageBox.Show("Папка не создана");
+                    } else
+                    {
+                        TreeViewEventArgs t = new TreeViewEventArgs(nodeCurrent);
+                        treeView1_AfterSelect(tvFolders, t);
+                    }
+                }
             }
             catch
             {
@@ -690,6 +809,179 @@ namespace FileCom
         private void рабочийСтолToolStripMenuItem_Click(object sender, EventArgs e)
         {
             quickWay("Desktop");
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form2 f = new Form2();
+            f.ShowDialog();
+            this.newFTP(f.textBox1.Text, f.textBox2.Text, f.textBox3.Text);
+        }
+
+        public void ShowFTPFiles(ListView lv, string name)
+        {
+            ListViewItem lvItem = new ListViewItem(name, 0);
+            lv.Items.Add(lvItem);
+        }
+
+        public void newFTP(string par1, string par2, string par3)
+        {
+            CurrFTP = new ftp(par1, par2, par3);
+            List<string> list = CurrFTP.GetAllFtpFiles("/");
+            treeView1.Nodes.Clear();
+            treeView1.Visible = true;
+            TreeNode ftpNode = new TreeNode(CurrFTP.getHost(), 0, 0);
+            treeView1.Nodes.Add(ftpNode);
+            TreeNodeCollection nodeCollection = ftpNode.Nodes;
+            if (isHide)
+            {
+                lvFiles.Items.Clear();
+                второйЭкранToolStripMenuItem.PerformClick();
+            }
+            else if (!isSec)
+            {
+                listView1.Items.Clear();
+            }
+            else
+            {
+                lvFiles.Items.Clear();
+                второйЭкранToolStripMenuItem.PerformClick();
+            }
+
+            foreach (string item in list)
+            {
+                if (!item.Contains('.'))
+                {
+                    ftpNode = new TreeNode(item.ToString() + "/", 3, 2);
+                    nodeCollection.Add(ftpNode);
+                    List<string> childList = CurrFTP.GetAllFtpFiles('/' + item);
+                    if (childList.Any())
+                    {
+                        this.getChilds(childList, ftpNode, ftpNode.Text.ToString());
+                    }
+                } 
+                else
+                {
+                    if (isHide)
+                    {
+                        InitListView(lvFiles);
+                        this.ShowFTPFiles(lvFiles, item.ToString());
+                    }
+                    else if (!isSec)
+                    {
+                        InitListView(listView1);
+                        this.ShowFTPFiles(listView1, item.ToString());
+                    }
+                    else
+                    {
+                        InitListView(lvFiles);
+                        this.ShowFTPFiles(lvFiles, item.ToString());
+                    }
+                }
+            }
+        }
+
+        public void getChilds(List<string> child, TreeNode parent, string text)
+        {
+            TreeNodeCollection nodeCollection = parent.Nodes;
+            foreach (string item in child)
+            {
+                if (!item.Contains('.'))
+                {
+                    TreeNode ftpNode = new TreeNode(item.ToString() + "/", 3, 2);
+                    nodeCollection.Add(ftpNode);
+                }
+            }
+        }
+
+        public void addChilds(TreeNode parent, string text)
+        {
+            List<string> list = CurrFTP.GetAllFtpFiles('/' + text);
+            TreeNodeCollection nodeCollection = parent.Nodes;
+            if (isHide)
+            {
+                lvFiles.Items.Clear();
+                второйЭкранToolStripMenuItem.PerformClick();
+            }
+            else if (!isSec)
+            {
+                listView1.Items.Clear();
+            }
+            else
+            {
+                lvFiles.Items.Clear();
+                второйЭкранToolStripMenuItem.PerformClick();
+            }
+            foreach (string item in list)
+            {
+                if (!item.Contains('.'))
+                {
+                    TreeNode ftpNode = new TreeNode(item.ToString() + "/", 3, 2);
+                    nodeCollection.Add(ftpNode);
+                    List<string> childList = CurrFTP.GetAllFtpFiles('/' + text + item);
+                    if (childList.Any())
+                    {
+                        this.getChilds(childList, ftpNode, '/' + text + ftpNode.Text.ToString());
+                    }
+                }
+                else
+                {
+                    if (isHide)
+                    {
+                        this.ShowFTPFiles(lvFiles, item.ToString());
+                    }
+                    else if (!isSec)
+                    {
+                        this.ShowFTPFiles(listView1, item.ToString());
+                    }
+                    else
+                    {
+                        this.ShowFTPFiles(lvFiles, item.ToString());
+                    }
+                }
+            }
+        }
+
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            lastPath = nodeCurrent;
+            nodeCurrent = e.Node;
+            string S2 = CurrFTP.getHost();
+            string S1;
+            try
+            {
+                S1 = nodeCurrent.FullPath;
+            }
+            catch
+            {
+                S1 = nodeCurrent.Text;
+            }
+
+            int index = S1.IndexOf(S2);
+            if (index != -1)
+            {
+                S1 = S1.Remove(index, S2.Length);
+            }
+            for(int i = 0; i < S1.Length; i++)
+            {
+                if(S1[i] == '\\')
+                {
+                    S1 = S1.Remove(i , 1);
+                }
+            }
+            textBox1.Text = S1;
+
+            //clear all sub-folders
+            nodeCurrent.Nodes.Clear();
+
+            if (nodeCurrent.SelectedImageIndex == 0)
+            {
+                this.newToolStripMenuItem.PerformClick();
+            }
+            else
+            {
+                this.addChilds(nodeCurrent, S1);
+            }
         }
     }
 }

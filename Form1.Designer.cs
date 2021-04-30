@@ -49,6 +49,9 @@
             this.тёмнаяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.светлаяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.downloadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.быстрыйДоступToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.загрузкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.рабочийСтолToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -65,9 +68,9 @@
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
-            this.быстрыйДоступToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.загрузкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.рабочийСтолToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ftpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.treeView1 = new System.Windows.Forms.TreeView();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -82,10 +85,11 @@
             this.главнаяToolStripMenuItem,
             this.видToolStripMenuItem,
             this.downloadsToolStripMenuItem,
-            this.быстрыйДоступToolStripMenuItem});
+            this.быстрыйДоступToolStripMenuItem,
+            this.ftpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(928, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1084, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -173,7 +177,7 @@
             this.тёмнаяToolStripMenuItem,
             this.светлаяToolStripMenuItem});
             this.темаToolStripMenuItem.Name = "темаToolStripMenuItem";
-            this.темаToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+            this.темаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.темаToolStripMenuItem.Text = "Тема";
             // 
             // тёмнаяToolStripMenuItem
@@ -194,6 +198,29 @@
             // 
             this.downloadsToolStripMenuItem.Name = "downloadsToolStripMenuItem";
             this.downloadsToolStripMenuItem.Size = new System.Drawing.Size(12, 20);
+            // 
+            // быстрыйДоступToolStripMenuItem
+            // 
+            this.быстрыйДоступToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.загрузкиToolStripMenuItem,
+            this.рабочийСтолToolStripMenuItem});
+            this.быстрыйДоступToolStripMenuItem.Name = "быстрыйДоступToolStripMenuItem";
+            this.быстрыйДоступToolStripMenuItem.Size = new System.Drawing.Size(109, 20);
+            this.быстрыйДоступToolStripMenuItem.Text = "Быстрый доступ";
+            // 
+            // загрузкиToolStripMenuItem
+            // 
+            this.загрузкиToolStripMenuItem.Name = "загрузкиToolStripMenuItem";
+            this.загрузкиToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.загрузкиToolStripMenuItem.Text = "Загрузки";
+            this.загрузкиToolStripMenuItem.Click += new System.EventHandler(this.загрузкиToolStripMenuItem_Click);
+            // 
+            // рабочийСтолToolStripMenuItem
+            // 
+            this.рабочийСтолToolStripMenuItem.Name = "рабочийСтолToolStripMenuItem";
+            this.рабочийСтолToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.рабочийСтолToolStripMenuItem.Text = "Рабочий стол";
+            this.рабочийСтолToolStripMenuItem.Click += new System.EventHandler(this.рабочийСтолToolStripMenuItem_Click);
             // 
             // textBox1
             // 
@@ -348,36 +375,42 @@
             this.toolStripMenuItem5.Text = "Скопировать";
             this.toolStripMenuItem5.Click += new System.EventHandler(this.toolStripMenuItem5_Click);
             // 
-            // быстрыйДоступToolStripMenuItem
+            // ftpToolStripMenuItem
             // 
-            this.быстрыйДоступToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.загрузкиToolStripMenuItem,
-            this.рабочийСтолToolStripMenuItem});
-            this.быстрыйДоступToolStripMenuItem.Name = "быстрыйДоступToolStripMenuItem";
-            this.быстрыйДоступToolStripMenuItem.Size = new System.Drawing.Size(109, 20);
-            this.быстрыйДоступToolStripMenuItem.Text = "Быстрый доступ";
+            this.ftpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newToolStripMenuItem});
+            this.ftpToolStripMenuItem.Name = "ftpToolStripMenuItem";
+            this.ftpToolStripMenuItem.Size = new System.Drawing.Size(34, 20);
+            this.ftpToolStripMenuItem.Text = "ftp";
             // 
-            // загрузкиToolStripMenuItem
+            // newToolStripMenuItem
             // 
-            this.загрузкиToolStripMenuItem.Name = "загрузкиToolStripMenuItem";
-            this.загрузкиToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.загрузкиToolStripMenuItem.Text = "Загрузки";
-            this.загрузкиToolStripMenuItem.Click += new System.EventHandler(this.загрузкиToolStripMenuItem_Click);
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Text = "New";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
-            // рабочийСтолToolStripMenuItem
+            // treeView1
             // 
-            this.рабочийСтолToolStripMenuItem.Name = "рабочийСтолToolStripMenuItem";
-            this.рабочийСтолToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.рабочийСтолToolStripMenuItem.Text = "Рабочий стол";
-            this.рабочийСтолToolStripMenuItem.Click += new System.EventHandler(this.рабочийСтолToolStripMenuItem_Click);
+            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.treeView1.ImageIndex = 0;
+            this.treeView1.ImageList = this.m_imageListTreeView;
+            this.treeView1.Location = new System.Drawing.Point(924, 0);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.SelectedImageIndex = 0;
+            this.treeView1.Size = new System.Drawing.Size(160, 459);
+            this.treeView1.TabIndex = 16;
+            this.treeView1.Visible = false;
+            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.Color.Blue;
-            this.ClientSize = new System.Drawing.Size(928, 459);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.ClientSize = new System.Drawing.Size(1084, 459);
+            this.Controls.Add(this.treeView1);
             this.Controls.Add(this.tvFolders);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -438,6 +471,9 @@
         private System.Windows.Forms.ToolStripMenuItem быстрыйДоступToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem загрузкиToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem рабочийСтолToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ftpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
+        private System.Windows.Forms.TreeView treeView1;
     }
 }
 
